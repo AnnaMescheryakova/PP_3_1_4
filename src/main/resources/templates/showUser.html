@@ -3,40 +3,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Users</title>
+    <title>User</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1>Users</h1>
+<h1>User</h1>
 <br/>
 <div>
     <table border="1">
         <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>Surname</th>
             <th>Age</th>
         </tr>
-        <tr th:each="user : ${users}">
+        <tr th:each="user : ${user}">
+            <td th:utext="${user.id}">...</td>
             <td th:utext="${user.name}">...</td>
             <td th:utext="${user.surname}">...</td>
             <td th:utext="${user.age}">...</td>
-            <td>
-                <form th:method="GET" th:action="@{/admin/{id}/edit(id=${user.id})}">
-                    <input type="submit" value="Edit"/>
-                </form>
-            </td>
-            <td>
-                <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.id})}">
-                    <input type="submit" value="Delete"/>
-                </form>
-            </td>
+
         </tr>
+
+        <tr th:each="role : ${user.getAuthorities()}">
+            <a th:text="${role.getAuthority()}">user</a>
+        </tr>
+
     </table>
-    <br/><br/>
-    <form th:method="GET" th:action="@{/admin/new}">
-        <input type="submit" value="Add new user"/>
-    </form>
 </div>
+<br>
+<td>
+    <form th:method="GET" th:action="@{/admin/{id}/edit(id=${user.id})}">
+        <input type="submit" value="Edit"/>
+    </form>
+</td>
+<br><br>
+<form th:method="DELETE" th:action="@{/admin/{id}(id=${user.id})}">
+    <input type="submit" value="Delete"/>
+</form>
+<br>
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Logout"/>
 </form>
