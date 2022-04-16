@@ -8,7 +8,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -50,8 +49,8 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String updateUser(User user) {
-        userService.add(user);
+    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id) {
+        userService.update(user, id);
         return "redirect:/admin";
     }
 

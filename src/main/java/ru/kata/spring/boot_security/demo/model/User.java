@@ -40,10 +40,12 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String surname, int age) {
+    public User(String name, String surname, int age, String username, String password) {
         this.name = name;
         this.surname = surname;
         this.age = age;
+        this.username = username;
+        this.password = password;
     }
 
     public int getId() {
