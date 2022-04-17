@@ -6,18 +6,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
-import ru.kata.spring.boot_security.demo.dao.UserRepository;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserDao userDao;
+
+    private final UserDao userDao;
 
     @Autowired
-    private UserRepository userRepository;
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public List<User> getAllUsers() {
@@ -50,16 +51,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User getUserByName(String username) {
-        return userRepository.findByUsername(username);
-//        return userDao.findByUsername(username);
+        return userDao.findByUsername(username);
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userDao.findByUsername(username);
-        User user = userRepository.findByUsername(username);
-        if (user == null){
+        User user = userDao.findByUsername(username);
+        if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
         user.getAuthorities().size();
