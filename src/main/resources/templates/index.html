@@ -15,11 +15,17 @@
             <th>Name</th>
             <th>Surname</th>
             <th>Age</th>
+            <th>Role</th>
         </tr>
         <tr th:each="user : ${users}">
             <td th:utext="${user.name}">...</td>
             <td th:utext="${user.surname}">...</td>
             <td th:utext="${user.age}">...</td>
+            <td>
+                <a th:each="role : ${user.getRoles()}"
+                   th:text="${role.name} + ' '">
+                </a>
+            </td>
             <td>
                 <form th:method="GET" th:action="@{/admin/{id}/edit(id=${user.id})}">
                     <input type="submit" value="Edit"/>

@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
@@ -13,10 +14,12 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 public class AdminController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping()
@@ -26,12 +29,15 @@ public class AdminController {
     }
 
     @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user) {
+    public String newUser(@ModelAttribute("user") User user, Model model) {
+        model.addAttribute("roles", roleService.getAllRoles());
         return "new";
     }
 
     @PostMapping()
-    public String createUser(@ModelAttribute("user") User user) {
+    public String createUser(@ModelAttribute("user") User user,
+                             @RequestParam(value = "nameRoles", required = false) String roles) {
+        user.setRoles(roleService.getByName(roles));
         userService.add(user);
         return "redirect:/admin";
     }
@@ -45,11 +51,14 @@ public class AdminController {
     @GetMapping("/{id}/edit")
     public String editUser(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("roles", roleService.getAllRoles());
         return "edit";
     }
 
     @PatchMapping("/{id}")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id) {
+    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id,
+                             @RequestParam(value = "nameRoles", required = false) String roles) {
+        user.setRoles(roleService.getByName(roles));
         userService.update(user, id);
         return "redirect:/admin";
     }

@@ -25,6 +25,13 @@
         <label for="passwordConfirm">PasswordConfirm: </label>
         <input type="password" th:field="*{passwordConfirm}" id="passwordConfirm"/>
         <br><br>
+        <select name="nameRoles" multiple size="2">
+            <option th:each="role : ${roles}"
+                    th:value="${role.name}"
+                    th:text="${role.getName()}">
+            </option>
+        </select>
+        <br><br>
         <input type="submit" value="Update">
     </form>
 </table>
