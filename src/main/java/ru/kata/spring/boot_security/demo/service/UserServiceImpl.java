@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,15 +28,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(int id) {
-        return userDao.getUserById(id);
-    }
-
-    @Override
     @Transactional
-    public void add(User user) {
+    public User add(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDao.add(user);
+        return user;
     }
 
     @Override
@@ -56,13 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User getUserByName(String username) {
-        return userDao.findByUsername(username);
-    }
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");

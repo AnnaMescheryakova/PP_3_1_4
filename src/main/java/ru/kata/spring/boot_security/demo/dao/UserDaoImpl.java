@@ -25,11 +25,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserById(int id) {
-        return entityManager.find(User.class, id);
-    }
-
-    @Override
     public void update(User user, int id) {
         entityManager.merge(user);
     }
@@ -41,7 +36,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findByUsername(String username) {
-        Query query = entityManager.createQuery("select user from User user where user.username = :username", User.class);
+        Query query = entityManager.createQuery("Select user from User user where user.username = :username", User.class);
         query.setParameter("username", username);
         return (User) query.getSingleResult();
     }
